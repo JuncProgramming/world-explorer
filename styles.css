@@ -1,0 +1,134 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9faff;
+  color: #222;
+}
+
+header {
+  background-color: #357abd;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 0 0 0.5rem 0.5rem;
+  margin-bottom: 1.25rem;
+  color: #fff;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  transition: color 0.25s ease;
+  cursor: default;
+}
+
+header h1:hover {
+  color: #a8cdfd;
+}
+
+#search {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #222;
+  background-color: #fff;
+  border: 2px solid #357abd;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: none;
+}
+
+#search::placeholder {
+  color: #8b9dc3;
+  font-style: italic;
+  opacity: 1;
+}
+
+#search:focus {
+  outline: none;
+  border-color: #1c5abf;
+  background-color: #f0f6ff;
+}
+
+.country-card {
+  display: flex;
+  align-items: stretch;
+  gap: 1.5rem;
+  max-width: 43.75rem;
+  margin: 0  auto 1.5rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.1);
+}
+
+.country-media {
+  width: 7.5rem;
+  height: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 0.375rem;
+}
+
+.country-media img {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  object-fit: cover;
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+button.favorite {
+  width: 100%;
+  background-color: gold;
+  border: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0 0 0.375rem 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+button.favorite:hover {
+  background-color: #e6c200;
+}
+
+/* INFO (nazwa, opis) */
+.country-info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.country-info h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.country-info p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #444;
+  margin: 0;
+}
