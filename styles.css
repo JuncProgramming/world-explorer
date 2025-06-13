@@ -175,3 +175,8 @@ button.favorite:hover {
 .country-detail-card .country-info strong {
   color: #444;
 }
+
+.favorite i {
+  color: #000;
+  height: 100%;
+}
