@@ -76,6 +76,7 @@ header h1:hover {
 }
 
 .country-media {
+  box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
   width: 7.5rem;
   height: 7.5rem;
   display: flex;
@@ -111,7 +112,6 @@ button.favorite:hover {
   background-color: #e6c200;
 }
 
-/* INFO (nazwa, opis) */
 .country-info {
   flex: 1 1 auto;
   display: flex;
@@ -131,4 +131,47 @@ button.favorite:hover {
   line-height: 1.4;
   color: #444;
   margin: 0;
+}
+
+.country-detail-card {
+  position: relative;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(0,0,0,0.12);
+  border-radius: 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+.country-detail-card .flag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.country-detail-card .country-info {
+  padding-right: 220px;
+}
+
+.country-detail-card .country-info h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #111;
+}
+
+.country-detail-card .country-info p {
+  font-size: 1.1rem;
+  margin: 8px 0;
+}
+
+.country-detail-card .country-info strong {
+  color: #444;
 }
