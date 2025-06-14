@@ -131,8 +131,9 @@ const displayCountryDetails = async () => {
     }
 
     const country = data[0];
+    const countries = getFavoriteCountries();
 
-    const pageHeader = document.querySelector('h1');
+    const pageHeader = document.querySelector('#details-header');
     pageHeader.textContent = `${country.name.official}`;
 
     container.innerHTML = '';
@@ -147,6 +148,34 @@ const displayCountryDetails = async () => {
 
     const info = document.createElement('div');
     info.classList.add('country-info');
+
+    const infoHeader = document.createElement('div');
+    infoHeader.classList.add('info-header');
+
+    const favorite = document.createElement('button');
+    favorite.classList.add('favorite');
+    const icon = document.createElement('i');
+    const isFavorite = countries.some(
+      (c) => c.name.common === country.name.common
+    );
+    isFavorite
+      ? icon.classList.add('fa-solid', 'fa-star')
+      : icon.classList.add('fa-regular', 'fa-star');
+    favorite.appendChild(icon);
+
+    favorite.addEventListener('click', () => {
+      const currentlyFavorite = getFavoriteCountries().some(
+        (c) => c.name.common === country.name.common
+      );
+
+      if (currentlyFavorite) {
+        icon.classList.replace('fa-solid', 'fa-regular');
+        removeFavoriteCountry(country);
+      } else {
+        icon.classList.replace('fa-regular', 'fa-solid');
+        saveFavoriteCountry(country);
+      }
+    });
 
     const name = document.createElement('h2');
     name.textContent = country.name.common;
@@ -178,8 +207,9 @@ const displayCountryDetails = async () => {
             .join(', ')
         : 'N/A'
     }`;
-
-    info.appendChild(name);
+    infoHeader.appendChild(name);
+    infoHeader.appendChild(favorite);
+    info.appendChild(infoHeader);
     info.appendChild(capital);
     info.appendChild(region);
     info.appendChild(population);
@@ -205,7 +235,7 @@ const loadFavoriteCountries = () => {
   const countries = getFavoriteCountries();
   const container = document.getElementById('favorites-container');
   container.innerHTML = '';
-  
+
   if (countries.length === 0) {
     container.textContent = 'No favorite countries saved.';
     return;
