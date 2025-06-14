@@ -222,3 +222,14 @@ button.favorite:hover {
   color: #000;
   height: 100%;
 }
+
+.centered-message {
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 10rem; /* Optional: ensures enough height for vertical centering */
+  font-weight: bold;
+  font-size: 1.2rem;
+}

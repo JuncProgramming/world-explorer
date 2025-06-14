@@ -12,7 +12,7 @@ const renderCountries = (countries, containerId) => {
   container.innerHTML = '';
 
   if (!countries || countries.length === 0) {
-    container.textContent = 'No matching countries found.';
+    container.innerHTML = `<div class="centered-message">No matching countries found.</div>`;
     return;
   }
 
@@ -96,16 +96,18 @@ const displayCountries = async () => {
     );
 
     if (!response.ok) {
-      document.getElementById(container).textContent =
-        'Failed to fetch countries';
+      document.getElementById(
+        container
+      ).innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
       return;
     }
 
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      document.getElementById(container).textContent =
-        'Countries not found';
+      document.getElementById(
+        container
+      ).innerHTML = `<div class="centered-message">Countries not found</div>`;
       return;
     }
 
@@ -113,8 +115,9 @@ const displayCountries = async () => {
     renderCountries(data, container);
   } catch (error) {
     console.error('Error fetching countries:', error);
-    document.getElementById(container).textContent =
-      'Error loading countries';
+    document.getElementById(
+      'details-container'
+    ).innerHTML = `<div class="centered-message">Error loading country details.</div>`;
   }
 };
 
@@ -123,26 +126,31 @@ const displayCountryDetails = async () => {
   const countryName = params.get('country');
 
   if (!countryName) {
-    document.getElementById('details-container').textContent =
-      'No country specified.';
+    document.getElementById(
+      'details-container'
+    ).innerHTML = `<div class="centered-message">No country specified</div>`;
     return;
   }
 
   try {
     const container = document.getElementById('details-container');
     const response = await fetch(
-      `${BASE_URL}name/${encodeURIComponent(countryName)}?fullText=true`
+      `${BASE_URLall}name/${encodeURIComponent(countryName)}?fullText=true`
     );
 
     if (!response.ok) {
-      container.textContent = 'Failed to fetch countries';
+      document.getElementById(
+        container
+      ).innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
       return;
     }
 
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      container.textContent = 'Countries not found';
+      document.getElementById(
+        container
+      ).innerHTML = `<div class="centered-message">Countries not found</div>`;
       return;
     }
 
@@ -237,8 +245,9 @@ const displayCountryDetails = async () => {
     container.appendChild(card);
   } catch (error) {
     console.error('Error fetching country details:', error);
-    document.getElementById('details-container').textContent =
-      'Error loading country details.';
+    document.getElementById(
+      'details-container'
+    ).innerHTML = `<div class="centered-message">Error loading country details.</div>`;
   }
 };
 
@@ -261,7 +270,9 @@ const loadFavoriteCountries = () => {
   renderCountries(countries, container);
 
   if (countries.length === 0) {
-    container.textContent = 'No favorite countries saved.';
+    document.getElementById(
+      container
+    ).innerHTML = `<div class="centered-message">No favorite countries saved.</div>`;
     return;
   }
 };
