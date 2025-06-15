@@ -135,7 +135,7 @@ const displayCountryDetails = async () => {
   try {
     const container = document.getElementById('details-container');
     const response = await fetch(
-      `${BASE_URLall}name/${encodeURIComponent(countryName)}?fullText=true`
+      `${BASE_URL}name/${encodeURIComponent(countryName)}?fullText=true`
     );
 
     if (!response.ok) {
@@ -267,7 +267,6 @@ const getFavoriteCountries = () => {
 const loadFavoriteCountries = () => {
   const countries = getFavoriteCountries();
   const container = 'favorites-container';
-  renderCountries(countries, container);
 
   if (countries.length === 0) {
     document.getElementById(
@@ -275,6 +274,14 @@ const loadFavoriteCountries = () => {
     ).innerHTML = `<div class="centered-message">No favorite countries saved.</div>`;
     return;
   }
+
+  renderCountries(countries, container);
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.classList.add('remove');
+  deleteBtn.textContent = 'Remove all';
+  document.getElementById(container).appendChild(deleteBtn);
+  deleteBtn.addEventListener('click', removeAllFavoriteCountries);
 };
 
 const saveFavoriteCountry = (country) => {
@@ -291,6 +298,11 @@ const removeFavoriteCountry = (country) => {
     (c) => c.name.common !== country.name.common
   );
   localStorage.setItem('favoriteCountries', JSON.stringify(filteredCountries));
+};
+
+const removeAllFavoriteCountries = () => {
+  localStorage.removeItem('favoriteCountries');
+  loadFavoriteCountries();
 };
 
 const init = () => {
