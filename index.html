@@ -18,7 +18,17 @@
       </div>
     </header>
     <main>
-      <input type="text" id="search" placeholder="Search for a country..." />
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="Search for a country..." />
+        <select id="sortFilter" class="sort-dropdown">
+          <option value="">Sort by...</option>
+          <option value="az">Name (A–Z)</option>
+          <option value="za">Name (Z–A)</option>
+          <option value="population-asc">Population (Low to High)</option>
+          <option value="population-desc">Population (High to Low)</option>
+          <option value="region">Region</option>
+        </select>
+      </div>
       <div id="countries-container"></div>
     </main>
     <script src="main.js"></script>

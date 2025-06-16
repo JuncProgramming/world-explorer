@@ -48,11 +48,11 @@ const renderCountries = (countries, containerId) => {
       );
 
       if (currentlyFavorite) {
-        icon.classList.replace('fa-solid', 'fa-regular');
         removeFavoriteCountry(country);
+        icon.classList.replace('fa-solid', 'fa-regular');
       } else {
-        icon.classList.replace('fa-regular', 'fa-solid');
         saveFavoriteCountry(country);
+        icon.classList.replace('fa-regular', 'fa-solid');
       }
     });
 
@@ -115,13 +115,48 @@ const displayCountries = async () => {
       return;
     }
 
-    global.allCountries = data;
+    global.allCountries = data.sort((a, b) => b.population - a.population);
+
+    const sort = document.getElementById('sortFilter');
+    if (sort) {
+      sort.addEventListener('change', () => {
+        switch (sort.value) {
+          case 'az':
+            global.allCountries = data.sort((a, b) =>
+              a.name.common.localeCompare(b.name.common)
+            );
+            break;
+          case 'za':
+            global.allCountries = data.sort((a, b) =>
+              b.name.common.localeCompare(a.name.common)
+            );
+            break;
+          case 'population-asc':
+            global.allCountries = data.sort(
+              (a, b) => a.population - b.population
+            );
+            break;
+          case 'population-desc':
+            global.allCountries = data.sort(
+              (a, b) => b.population - a.population
+            );
+            break;
+          case 'region':
+            global.allCountries = data.sort((a, b) =>
+              a.region.localeCompare(b.region)
+            );
+            break;
+        }
+        renderCountries(data, container);
+      });
+    }
+
     renderCountries(data, container);
   } catch (error) {
     console.error('Error fetching countries:', error);
     document.getElementById(
-      'details-container'
-    ).innerHTML = `<div class="centered-message">Error loading country details.</div>`;
+      container
+    ).innerHTML = `<div class="centered-message">Error loading countries.</div>`;
   }
 };
 
@@ -193,11 +228,11 @@ const displayCountryDetails = async () => {
       );
 
       if (currentlyFavorite) {
-        icon.classList.replace('fa-solid', 'fa-regular');
         removeFavoriteCountry(country);
+        icon.classList.replace('fa-solid', 'fa-regular');
       } else {
-        icon.classList.replace('fa-regular', 'fa-solid');
         saveFavoriteCountry(country);
+        icon.classList.replace('fa-regular', 'fa-solid');
       }
     });
 
