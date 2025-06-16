@@ -87,6 +87,7 @@ const renderCountries = (countries, containerId) => {
 };
 
 const displayCountries = async () => {
+  const spinner = document.querySelector('.spinner');
   const container = 'countries-container';
 
   const search = document.getElementById('search');
@@ -95,6 +96,8 @@ const displayCountries = async () => {
   }
 
   try {
+    spinner.style.display = 'flex';
+
     const response = await fetch(
       `${BASE_URL}all?fields=name,capital,flag,languages,currencies,borders,area,region,population,flags`
     );
@@ -157,10 +160,13 @@ const displayCountries = async () => {
     document.getElementById(
       container
     ).innerHTML = `<div class="centered-message">Error loading countries.</div>`;
+  } finally {
+    spinner.style.display = 'none';
   }
 };
 
 const displayCountryDetails = async () => {
+  const spinner = document.querySelector('.spinner');
   const params = new URLSearchParams(window.location.search);
   const countryName = params.get('country');
 
@@ -172,7 +178,11 @@ const displayCountryDetails = async () => {
   }
 
   try {
+    const spinner = document.querySelector('.spinner');
     const container = document.getElementById('details-container');
+
+    spinner.style.display = 'flex';
+
     const response = await fetch(
       `${BASE_URL}name/${encodeURIComponent(countryName)}?fullText=true`
     );
@@ -283,6 +293,8 @@ const displayCountryDetails = async () => {
     document.getElementById(
       'details-container'
     ).innerHTML = `<div class="centered-message">Error loading country details.</div>`;
+  } finally {
+    spinner.style.display = 'none';
   }
 };
 
