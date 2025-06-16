@@ -5,8 +5,6 @@ const global = {
 
 const BASE_URL = 'https://restcountries.com/v3.1/';
 
-const search = document.getElementById('search');
-
 const renderCountries = (countries, containerId) => {
   const container = document.getElementById(`${containerId}`);
   container.innerHTML = '';
@@ -90,6 +88,12 @@ const renderCountries = (countries, containerId) => {
 
 const displayCountries = async () => {
   const container = 'countries-container';
+
+  const search = document.getElementById('search');
+  if (search) {
+    search.addEventListener('input', onSearch);
+  }
+
   try {
     const response = await fetch(
       `${BASE_URL}all?fields=name,capital,flag,languages,currencies,borders,area,region,population,flags`
@@ -111,7 +115,7 @@ const displayCountries = async () => {
       return;
     }
 
-    allCountries = data;
+    global.allCountries = data;
     renderCountries(data, container);
   } catch (error) {
     console.error('Error fetching countries:', error);
@@ -139,18 +143,14 @@ const displayCountryDetails = async () => {
     );
 
     if (!response.ok) {
-      document.getElementById(
-        container
-      ).innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
+      container.innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
       return;
     }
 
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      document.getElementById(
-        container
-      ).innerHTML = `<div class="centered-message">Countries not found</div>`;
+      container.innerHTML = `<div class="centered-message">Countries not found</div>`;
       return;
     }
 
@@ -252,8 +252,12 @@ const displayCountryDetails = async () => {
 };
 
 const onSearch = () => {
+  const search = document.getElementById('search');
   const query = search.value.toLowerCase();
-  const filteredData = allCountries.filter((country) =>
+
+  if (!global.allCountries) return;
+
+  const filteredData = global.allCountries.filter((country) =>
     country.name.common.toLowerCase().includes(query)
   );
   renderCountries(filteredData, 'countries-container');
@@ -318,7 +322,6 @@ const init = () => {
       loadFavoriteCountries();
       break;
   }
-  search.addEventListener('input', onSearch);
 };
 
 document.addEventListener('DOMContentLoaded', init);
