@@ -28,7 +28,7 @@ const renderCountries = (countries, containerId) => {
     img.alt = country.flags?.alt || `${country.name.common} flag`;
     img.addEventListener('click', () => {
       window.location.href = `details.html?country=${encodeURIComponent(
-        country.name.common
+        country.name.official
       )}`;
     });
 
@@ -37,14 +37,14 @@ const renderCountries = (countries, containerId) => {
     const icon = document.createElement('i');
 
     const isFavorite = favorites.some(
-      (c) => c.name.common === country.name.common
+      (c) => c.name.official === country.name.official
     );
     icon.classList.add(isFavorite ? 'fa-solid' : 'fa-regular', 'fa-star');
     favorite.appendChild(icon);
 
     favorite.addEventListener('click', () => {
       const currentlyFavorite = getFavoriteCountries().some(
-        (c) => c.name.common === country.name.common
+        (c) => c.name.official === country.name.official
       );
 
       if (currentlyFavorite) {
@@ -225,7 +225,7 @@ const displayCountryDetails = async () => {
     favorite.classList.add('favorite');
     const icon = document.createElement('i');
     const isFavorite = countries.some(
-      (c) => c.name.common === country.name.common
+      (c) => c.name.official === country.name.official
     );
     isFavorite
       ? icon.classList.add('fa-solid', 'fa-star')
@@ -234,7 +234,7 @@ const displayCountryDetails = async () => {
 
     favorite.addEventListener('click', () => {
       const currentlyFavorite = getFavoriteCountries().some(
-        (c) => c.name.common === country.name.common
+        (c) => c.name.official === country.name.official
       );
 
       if (currentlyFavorite) {
@@ -337,8 +337,8 @@ const loadFavoriteCountries = () => {
 
 const saveFavoriteCountry = (country) => {
   const countries = getFavoriteCountries();
-  const mappedCountries = countries.map((c) => c.name.common);
-  if (mappedCountries.includes(country.name.common)) return;
+  const mappedCountries = countries.map((c) => c.name.official);
+  if (mappedCountries.includes(country.name.official)) return;
   countries.push(country);
   localStorage.setItem('favoriteCountries', JSON.stringify(countries));
 };
@@ -346,7 +346,7 @@ const saveFavoriteCountry = (country) => {
 const removeFavoriteCountry = (country) => {
   const countries = getFavoriteCountries();
   const filteredCountries = countries.filter(
-    (c) => c.name.common !== country.name.common
+    (c) => c.name.official !== country.name.official
   );
   localStorage.setItem('favoriteCountries', JSON.stringify(filteredCountries));
 };
