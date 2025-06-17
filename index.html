@@ -28,20 +28,30 @@
           <option value="population-desc">Population (High to Low)</option>
           <option value="region">Region</option>
         </select>
+        <button id="filterBtn" class="filter-button" aria-label="Filter">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+        <div id="filterMenu" class="filter-menu hidden">
+          <label><input type="checkbox" value="Europe" checked="true"/> Europe</label>
+          <label><input type="checkbox" value="Asia" checked="true"/> Asia</label>
+          <label><input type="checkbox" value="Africa" checked="true"/> Africa</label>
+          <label><input type="checkbox" value="Americas" checked="true"/> Americas</label>
+          <label><input type="checkbox" value="Oceania" checked="true"/> Oceania</label>
+          <button id="applyFilters">Apply</button>
+        </div>
       </div>
       <div class="spinner" aria-label="Loading" role="status">
-          <svg viewBox="0 0 50 50">
-            <circle
-              class="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              stroke-width="5"></circle>
-          </svg>
-        </div>
-      <div id="countries-container">
+        <svg viewBox="0 0 50 50">
+          <circle
+            class="path"
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            stroke-width="5"></circle>
+        </svg>
       </div>
+      <div id="countries-container"></div>
     </main>
     <script src="main.js"></script>
   </body>

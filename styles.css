@@ -308,3 +308,64 @@ button.favorite:hover {
     stroke-dashoffset: -124;
   }
 }
+
+.filter-button {
+  width: 3.25rem;
+  height: 3.25rem;
+  background-color: #fff;
+  border: 2px solid #1E56A0;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #1E56A0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.filter-button:hover {
+  background-color: #f0f4ff;
+}
+
+.filter-menu {
+  position: absolute;
+  top: 5.5rem;
+  right: 1rem;
+  background: white;
+  border: 2px solid #1E56A0;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 12rem;
+}
+
+.filter-menu label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.filter-menu button {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  background-color: #1E56A0;
+  color: white;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.filter-menu button:hover {
+  background-color: #163172;
+}
+
+.hidden {
+  display: none;
+}
