@@ -381,24 +381,28 @@ const removeFavoriteCountry = (country) => {
 };
 
 const removeAllFavoriteCountries = () => {
-  if (confirm('Are you sure you want to delete all countries from favorites?')) {
+  if (
+    confirm('Are you sure you want to delete all countries from favorites?')
+  ) {
     localStorage.removeItem('favoriteCountries');
     loadFavoriteCountries();
   }
 };
 
 const init = () => {
-  switch (global.currentPage) {
-    case '/':
-    case '/index.html':
+  switch (true) {
+    case global.currentPage.endsWith('/') ||
+      global.currentPage.endsWith('/index.html'):
       displayCountries();
       break;
-    case '/details.html':
+    case global.currentPage.endsWith('/details.html'):
       displayCountryDetails();
       break;
-    case '/favorites.html':
+    case global.currentPage.endsWith('/favorites.html'):
       loadFavoriteCountries();
       break;
+    default:
+      console.log('Page not recognized:', global.currentPage);
   }
 };
 
