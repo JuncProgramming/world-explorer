@@ -6,12 +6,15 @@ const global = {
 
 const BASE_URL = 'https://restcountries.com/v3.1/';
 
-const renderCountries = (countries, containerId) => {
-  const container = document.getElementById(`${containerId}`);
+const displayError = (container, message) => {
+  container.innerHTML = `<div class="centered-message" role="alert">${message}</div>`;
+};
+
+const renderCountries = (countries, container) => {
   container.innerHTML = '';
 
   if (!countries || countries.length === 0) {
-    container.innerHTML = `<div class="centered-message">No matching countries found.</div>`;
+    displayError(container, 'No matching countries found');
     return;
   }
 
@@ -89,7 +92,7 @@ const renderCountries = (countries, containerId) => {
 
 const displayCountries = async () => {
   const spinner = document.querySelector('.spinner');
-  const container = 'countries-container';
+  const container = document.getElementById('countries-container');
 
   try {
     spinner.style.display = 'flex';
@@ -106,18 +109,14 @@ const displayCountries = async () => {
     );
 
     if (!response.ok) {
-      document.getElementById(
-        container
-      ).innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
+      displayError(container, 'Failed to fetch countries');
       return;
     }
 
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      document.getElementById(
-        container
-      ).innerHTML = `<div class="centered-message">Countries not found</div>`;
+      displayError(container, 'Countries not found');
       return;
     }
 
@@ -150,9 +149,7 @@ const displayCountries = async () => {
     applyAllFiltersAndRender();
   } catch (error) {
     console.error('Error fetching countries:', error);
-    document.getElementById(
-      container
-    ).innerHTML = `<div class="centered-message">Error loading countries.</div>`;
+    displayError(container, 'Error loading countries');
   } finally {
     spinner.style.display = 'none';
   }
@@ -162,18 +159,14 @@ const displayCountryDetails = async () => {
   const spinner = document.querySelector('.spinner');
   const params = new URLSearchParams(window.location.search);
   const countryName = params.get('country');
+  const container = document.getElementById('details-container');
 
   if (!countryName) {
-    document.getElementById(
-      'details-container'
-    ).innerHTML = `<div class="centered-message">No country specified</div>`;
+    displayError(container, 'No country specified');
     return;
   }
 
   try {
-    const spinner = document.querySelector('.spinner');
-    const container = document.getElementById('details-container');
-
     spinner.style.display = 'flex';
 
     const response = await fetch(
@@ -181,14 +174,14 @@ const displayCountryDetails = async () => {
     );
 
     if (!response.ok) {
-      container.innerHTML = `<div class="centered-message">Failed to fetch countries</div>`;
+      displayError(container, 'Failed to fetch countries');
       return;
     }
 
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      container.innerHTML = `<div class="centered-message">Countries not found</div>`;
+      displayError(container, 'Countries not found');
       return;
     }
 
@@ -283,15 +276,15 @@ const displayCountryDetails = async () => {
     container.appendChild(card);
   } catch (error) {
     console.error('Error fetching country details:', error);
-    document.getElementById(
-      'details-container'
-    ).innerHTML = `<div class="centered-message">Error loading country details.</div>`;
+    displayError(container, 'Error loading country details');
   } finally {
     spinner.style.display = 'none';
   }
 };
 
 function applyAllFiltersAndRender() {
+  const container = document.getElementById('countries-container');
+
   if (!global.allCountries) return;
 
   let filtered = [...global.allCountries];
@@ -330,10 +323,11 @@ function applyAllFiltersAndRender() {
       filtered.sort((a, b) => b.population - a.population);
   }
 
-  renderCountries(filtered, 'countries-container');
+  renderCountries(filtered, container);
 }
 
 const onSearch = () => {
+  const container = document.getElementById('countries-container');
   const search = document.getElementById('search');
   const query = search.value.toLowerCase();
 
@@ -342,7 +336,7 @@ const onSearch = () => {
   const filteredData = global.allCountries.filter((country) =>
     country.name.common.toLowerCase().includes(query)
   );
-  renderCountries(filteredData, 'countries-container');
+  renderCountries(filteredData, container);
 };
 
 const getFavoriteCountries = () => {
@@ -352,12 +346,12 @@ const getFavoriteCountries = () => {
 
 const loadFavoriteCountries = () => {
   const countries = getFavoriteCountries();
-  const container = 'favorites-container';
+  const container = document.getElementById('favorites-container');
+
+  container.innerHTML = '';
 
   if (countries.length === 0) {
-    document.getElementById(
-      container
-    ).innerHTML = `<div class="centered-message">No favorite countries saved.</div>`;
+    displayError(container, 'No favorite countries saved');
     return;
   }
 
@@ -366,7 +360,7 @@ const loadFavoriteCountries = () => {
   const deleteBtn = document.createElement('button');
   deleteBtn.classList.add('remove');
   deleteBtn.textContent = 'Remove all';
-  document.getElementById(container).appendChild(deleteBtn);
+  container.appendChild(deleteBtn);
   deleteBtn.addEventListener('click', removeAllFavoriteCountries);
 };
 
@@ -387,8 +381,10 @@ const removeFavoriteCountry = (country) => {
 };
 
 const removeAllFavoriteCountries = () => {
-  localStorage.removeItem('favoriteCountries');
-  loadFavoriteCountries();
+  if (confirm('Are you sure you want to delete all countries from favorites?')) {
+    localStorage.removeItem('favoriteCountries');
+    loadFavoriteCountries();
+  }
 };
 
 const init = () => {
