@@ -1,6 +1,7 @@
 const global = {
   currentPage: window.location.pathname,
   allCountries: null,
+  selectedRegions: [],
 };
 
 const BASE_URL = 'https://restcountries.com/v3.1/';
@@ -90,16 +91,18 @@ const displayCountries = async () => {
   const spinner = document.querySelector('.spinner');
   const container = 'countries-container';
 
-  const search = document.getElementById('search');
-  if (search) {
-    search.addEventListener('input', onSearch);
-  }
-
   try {
     spinner.style.display = 'flex';
 
     const response = await fetch(
       `${BASE_URL}all?fields=name,capital,flag,languages,currencies,borders,area,region,population,flags`
+    );
+
+    const initialCheckboxes = document.querySelectorAll(
+      '#filterMenu input[type="checkbox"]:checked'
+    );
+    global.selectedRegions = Array.from(initialCheckboxes).map(
+      (check) => check.value
     );
 
     if (!response.ok) {
@@ -118,43 +121,33 @@ const displayCountries = async () => {
       return;
     }
 
-    global.allCountries = data.sort((a, b) => b.population - a.population);
+    global.allCountries = data;
+    const search = document.getElementById('search');
+    if (search) search.addEventListener('input', applyAllFiltersAndRender);
 
     const sort = document.getElementById('sortFilter');
-    if (sort) {
-      sort.addEventListener('change', () => {
-        switch (sort.value) {
-          case 'az':
-            global.allCountries = data.sort((a, b) =>
-              a.name.common.localeCompare(b.name.common)
-            );
-            break;
-          case 'za':
-            global.allCountries = data.sort((a, b) =>
-              b.name.common.localeCompare(a.name.common)
-            );
-            break;
-          case 'population-asc':
-            global.allCountries = data.sort(
-              (a, b) => a.population - b.population
-            );
-            break;
-          case 'population-desc':
-            global.allCountries = data.sort(
-              (a, b) => b.population - a.population
-            );
-            break;
-          case 'region':
-            global.allCountries = data.sort((a, b) =>
-              a.region.localeCompare(b.region)
-            );
-            break;
-        }
-        renderCountries(data, container);
+    if (sort) sort.addEventListener('change', applyAllFiltersAndRender);
+
+    const filterBtn = document.getElementById('filterBtn');
+    if (filterBtn) {
+      filterBtn.addEventListener('click', () => {
+        document.getElementById('filterMenu').classList.toggle('hidden');
       });
     }
 
-    renderCountries(data, container);
+    const applyBtn = document.getElementById('applyFilters');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll(
+          '#filterMenu input[type="checkbox"]:checked'
+        );
+        global.selectedRegions = Array.from(checkboxes).map(
+          (check) => check.value
+        );
+        applyAllFiltersAndRender();
+      });
+    }
+    applyAllFiltersAndRender();
   } catch (error) {
     console.error('Error fetching countries:', error);
     document.getElementById(
@@ -297,6 +290,48 @@ const displayCountryDetails = async () => {
     spinner.style.display = 'none';
   }
 };
+
+function applyAllFiltersAndRender() {
+  if (!global.allCountries) return;
+
+  let filtered = [...global.allCountries];
+
+  if (global.selectedRegions.length > 0) {
+    filtered = filtered.filter((country) =>
+      global.selectedRegions.includes(country.region)
+    );
+  }
+
+  const searchTerm = document.getElementById('search').value.toLowerCase();
+  if (searchTerm) {
+    filtered = filtered.filter((country) =>
+      country.name.common.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  const sortValue = document.getElementById('sortFilter').value;
+  switch (sortValue) {
+    case 'az':
+      filtered.sort((a, b) => a.name.common.localeCompare(b.name.common));
+      break;
+    case 'za':
+      filtered.sort((a, b) => b.name.common.localeCompare(a.name.common));
+      break;
+    case 'population-asc':
+      filtered.sort((a, b) => a.population - b.population);
+      break;
+    case 'population-desc':
+      filtered.sort((a, b) => b.population - a.population);
+      break;
+    case 'region':
+      filtered.sort((a, b) => a.region.localeCompare(b.region));
+      break;
+    default:
+      filtered.sort((a, b) => b.population - a.population);
+  }
+
+  renderCountries(filtered, 'countries-container');
+}
 
 const onSearch = () => {
   const search = document.getElementById('search');
